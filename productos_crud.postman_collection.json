@@ -1,0 +1,89 @@
+{
+  "info": {
+    "name": "CRUD Productos Ecommerce JPA",
+    "description": "Colección de pruebas para el CRUD de productos, incluyendo relaciones con categorías, usuarios y cartItems.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Crear Producto",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Pelota interactiva\",\n  \"descrip\": \"Pelota con luz y movimiento\",\n  \"image_url\": \"https://img.com/pelota.jpg\",\n  \"sku\": \"SKU001\",\n  \"price\": 9.99,\n  \"units\": 100,\n  \"category\": { \"id\": 1 }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/productos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "productos"]
+        }
+      }
+    },
+    {
+      "name": "Listar Productos",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/productos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "productos"]
+        }
+      }
+    },
+    {
+      "name": "Obtener Producto por ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/productos/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "productos", "1"]
+        }
+      }
+    },
+    {
+      "name": "Actualizar Producto",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Pelota interactiva actualizada\",\n  \"descrip\": \"Pelota con luz y sonido\",\n  \"image_url\": \"https://img.com/pelota_new.jpg\",\n  \"sku\": \"SKU001\",\n  \"price\": 12.99,\n  \"units\": 80,\n  \"category\": { \"id\": 1 }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/productos/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "productos", "1"]
+        }
+      }
+    },
+    {
+      "name": "Eliminar Producto",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:8080/api/productos/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "productos", "1"]
+        }
+      }
+    }
+  ]
+}
+
