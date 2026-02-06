@@ -1,8 +1,12 @@
 package org.iesvdm.ecommerce_jpa.controller;
 
+import jakarta.validation.Valid;
 import org.iesvdm.ecommerce_jpa.domain.Product;
+import org.iesvdm.ecommerce_jpa.dto.CartResponseDTO;
+import org.iesvdm.ecommerce_jpa.service.CartItemService;
 import org.iesvdm.ecommerce_jpa.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +19,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CartItemService cartItemService;
 
     @GetMapping
     public List<Product> getAll() {
@@ -29,12 +36,13 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        return productService.save(product);
+    public ResponseEntity<Product> create(@Valid @RequestBody Product product) {
+        Product saved = productService.save(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<Product> update(@PathVariable Long id, @Valid @RequestBody Product product) {
         if (!productService.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
@@ -50,5 +58,10 @@ public class ProductController {
         productService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-}
 
+    @PostMapping("/add-to-cart")
+    public ResponseEntity<CartResponseDTO> addToCart(@RequestParam Long userId, @RequestParam Long productId, @RequestParam(defaultValue = "1") Integer quantity) {
+        CartResponseDTO response = cartItemService.addProductToCart(userId, productId, quantity);
+        return ResponseEntity.ok(response);
+    }
+}

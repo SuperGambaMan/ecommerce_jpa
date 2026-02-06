@@ -1,12 +1,25 @@
 {
   "info": {
-    "name": "CRUD Productos Ecommerce JPA",
-    "description": "Colección de pruebas para el CRUD de productos, incluyendo relaciones con categorías, usuarios y cartItems.",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "_postman_id": "ecommerce-jpa-product-crud-2026-02-04",
+    "name": "Ecommerce JPA - CRUD Producto",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Colección de pruebas CRUD para el endpoint /api/productos"
   },
   "item": [
     {
-      "name": "Crear Producto",
+      "name": "Listar todos los productos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}",
+          "host": ["{{baseUrl}}"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Crear producto",
       "request": {
         "method": "POST",
         "header": [
@@ -14,45 +27,30 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Pelota interactiva\",\n  \"descrip\": \"Pelota con luz y movimiento\",\n  \"image_url\": \"https://img.com/pelota.jpg\",\n  \"sku\": \"SKU001\",\n  \"price\": 9.99,\n  \"units\": 100,\n  \"category\": { \"id\": 1 }\n}"
+          "raw": "{\n  \"name\": \"Producto Test\",\n  \"descrip\": \"Descripción de prueba\",\n  \"sku\": \"SKU_TEST_001\",\n  \"price\": 99.99,\n  \"units\": 10,\n  \"category\": { \"id\": {{categoryId}} }\n}"
         },
         "url": {
-          "raw": "http://localhost:8080/api/productos",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos"]
+          "raw": "{{baseUrl}}",
+          "host": ["{{baseUrl}}"]
         }
-      }
+      },
+      "response": []
     },
     {
-      "name": "Listar Productos",
+      "name": "Obtener producto por ID",
       "request": {
         "method": "GET",
+        "header": [],
         "url": {
-          "raw": "http://localhost:8080/api/productos",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos"]
+          "raw": "{{baseUrl}}/{{productId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["{{productId}}"]
         }
-      }
+      },
+      "response": []
     },
     {
-      "name": "Obtener Producto por ID",
-      "request": {
-        "method": "GET",
-        "url": {
-          "raw": "http://localhost:8080/api/productos/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos", "1"]
-        }
-      }
-    },
-    {
-      "name": "Actualizar Producto",
+      "name": "Actualizar producto",
       "request": {
         "method": "PUT",
         "header": [
@@ -60,30 +58,46 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Pelota interactiva actualizada\",\n  \"descrip\": \"Pelota con luz y sonido\",\n  \"image_url\": \"https://img.com/pelota_new.jpg\",\n  \"sku\": \"SKU001\",\n  \"price\": 12.99,\n  \"units\": 80,\n  \"category\": { \"id\": 1 }\n}"
+          "raw": "{\n  \"name\": \"Producto Actualizado\",\n  \"descrip\": \"Descripción actualizada\",\n  \"sku\": \"SKU_TEST_001\",\n  \"price\": 120.50,\n  \"units\": 5,\n  \"category\": { \"id\": {{categoryId}} }\n}"
         },
         "url": {
-          "raw": "http://localhost:8080/api/productos/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos", "1"]
+          "raw": "{{baseUrl}}/{{productId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["{{productId}}"]
         }
-      }
+      },
+      "response": []
     },
     {
-      "name": "Eliminar Producto",
+      "name": "Eliminar producto",
       "request": {
         "method": "DELETE",
+        "header": [],
         "url": {
-          "raw": "http://localhost:8080/api/productos/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos", "1"]
+          "raw": "{{baseUrl}}/{{productId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["{{productId}}"]
         }
-      }
+      },
+      "response": []
+    },
+    {
+      "name": "Añadir producto al carrito",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/add-to-cart?userId={{userId}}&productId={{productId}}&quantity=2",
+          "host": ["{{baseUrl}}"],
+          "path": ["add-to-cart"],
+          "query": [
+            { "key": "userId", "value": "{{userId}}" },
+            { "key": "productId", "value": "{{productId}}" },
+            { "key": "quantity", "value": "2" }
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }
-

@@ -38,15 +38,17 @@ public class CategoryProductRelationTests {
     @Test
     @Order(1)
     void crearCategoryConProducts() {
+        String uniqueSuffix = String.valueOf(System.currentTimeMillis());
+
         Category category = new Category();
-        category.setName("Electrónica");
+        category.setName("Electrónica_" + uniqueSuffix);
         category.setDescription("Dispositivos electrónicos");
         category.setProducts(new HashSet<>());
 
         Product product1 = new Product();
-        product1.setName("Smartphone");
+        product1.setName("Smartphone_" + uniqueSuffix);
         product1.setDescrip("Teléfono móvil");
-        product1.setSku("SKU001");
+        product1.setSku("SKU_" + uniqueSuffix);
         product1.setPrice(java.math.BigDecimal.valueOf(299.99));
         product1.setUnits(50);
         product1.setCategory(category);
@@ -59,14 +61,47 @@ public class CategoryProductRelationTests {
     @Test
     @Order(2)
     void orphanRemovalProduct() {
-        Category category = categoryRepository.findAll().stream().findFirst().orElse(null);
-        assertNotNull(category);
-        Set<Product> products = category.getProducts();
-        Product product = products.stream().findFirst().orElse(null);
-        assertNotNull(product);
-        products.remove(product);
-        categoryRepository.save(category);
-        assertFalse(productRepository.findById(product.getId()).isPresent());
+        transactionTemplate.execute(status -> {
+            String uniqueSuffix = String.valueOf(System.currentTimeMillis());
+
+            // Crear categoría con producto
+            Category category = new Category();
+            category.setName("TestOrphan_" + uniqueSuffix);
+            category.setDescription("Test orphan removal");
+            category.setProducts(new HashSet<>());
+
+            Product product = new Product();
+            product.setName("ProductoOrphan_" + uniqueSuffix);
+            product.setDescrip("Descripción test");
+            product.setSku("SKU_ORPHAN_" + uniqueSuffix);
+            product.setPrice(java.math.BigDecimal.valueOf(100.00));
+            product.setUnits(10);
+            product.setCategory(category);
+            category.getProducts().add(product);
+
+            categoryRepository.save(category);
+            Long productId = product.getId();
+            Long categoryId = category.getId();
+            assertNotNull(productId);
+
+            entityManager.flush();
+            entityManager.clear();
+
+            // Buscar la categoría y eliminar el producto
+            Category savedCategory = categoryRepository.findById(categoryId).orElse(null);
+            assertNotNull(savedCategory);
+            Set<Product> products = savedCategory.getProducts();
+            assertFalse(products.isEmpty());
+
+            products.clear();
+            categoryRepository.save(savedCategory);
+            entityManager.flush();
+            entityManager.clear();
+
+            // Verificar que el producto fue eliminado por orphanRemoval
+            assertFalse(productRepository.findById(productId).isPresent());
+            return null;
+        });
     }
 }
 
