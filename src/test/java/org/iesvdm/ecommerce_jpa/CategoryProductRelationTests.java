@@ -12,7 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,43 +32,85 @@ public class CategoryProductRelationTests {
     private PlatformTransactionManager transactionManager;
     private TransactionTemplate transactionTemplate;
 
+    @BeforeAll
+    public static void cleanAll(@Autowired ProductRepository productRepository,
+                                @Autowired CategoryRepository categoryRepository) {
+        productRepository.deleteAll();
+        categoryRepository.deleteAll();
+    }
+
     @BeforeEach
     public void setUp() {
         transactionTemplate = new TransactionTemplate(transactionManager);
     }
 
-    @Test
     @Order(1)
-    void crearCategoryConProducts() {
-        Category category = new Category();
-        category.setName("Electrónica");
-        category.setDescription("Dispositivos electrónicos");
-        category.setProducts(new HashSet<>());
+    @Test
+    void crearCategoryProductTest() {
+        Category category = Category.builder()
+                .name("Electrónica")
+                .descrip("Dispositivos electrónicos")
+                .products(new HashSet<>())
+                .build();
+        category = categoryRepository.save(category);
 
-        Product product1 = new Product();
-        product1.setName("Smartphone");
-        product1.setDescrip("Teléfono móvil");
-        product1.setSku("SKU001");
-        product1.setPrice(java.math.BigDecimal.valueOf(299.99));
-        product1.setUnits(50);
-        product1.setCategory(category);
-        category.getProducts().add(product1);
-
-        categoryRepository.save(category);
-        assertNotNull(product1.getId());
+        Product product = Product.builder()
+                .name("Smartphone")
+                .descrip("Teléfono móvil")
+                .sku("SKU001")
+                .price(BigDecimal.valueOf(299.99))
+                .quantity(50L)
+                .category(category)
+                .build();
+        category.getProducts().add(product);
+        productRepository.save(product);
     }
 
-    @Test
     @Order(2)
-    void orphanRemovalProduct() {
-        Category category = categoryRepository.findAll().stream().findFirst().orElse(null);
-        assertNotNull(category);
-        Set<Product> products = category.getProducts();
-        Product product = products.stream().findFirst().orElse(null);
-        assertNotNull(product);
-        products.remove(product);
-        categoryRepository.save(category);
-        assertFalse(productRepository.findById(product.getId()).isPresent());
+    @Test
+    void leerCategoryYProductsPorCategory() {
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            List<Category> listCategory = this.categoryRepository.findAll();
+            listCategory.forEach(category -> {
+                Set<Product> setProducts = category.getProducts();
+                setProducts.forEach(product -> {
+                    System.out.println(product);
+                });
+            });
+        });
+    }
+
+    @Order(3)
+    @Test
+    void desasociarProduct() {
+        transactionTemplate.executeWithoutResult(status -> {
+            // Crear categoría y producto
+            Category category = Category.builder()
+                    .name("PruebaDesasociar")
+                    .descrip("Categoría para test de desasociación")
+                    .products(new HashSet<>())
+                    .build();
+            category = categoryRepository.save(category);
+
+            Product product = Product.builder()
+                    .name("ProductoDesasociar")
+                    .descrip("Producto para test de desasociación")
+                    .sku("SKU-TEST-DESASOC")
+                    .price(BigDecimal.valueOf(10.0))
+                    .quantity(1L)
+                    .category(category)
+                    .build();
+            category.getProducts().add(product);
+            product = productRepository.save(product);
+
+            // Buscar el producto por id y la categoría por id (simulando la relación intermedia)
+            Product productToDelete = productRepository.findById(product.getId()).orElse(null);
+            assertNotNull(productToDelete);
+            productRepository.delete(productToDelete);
+            entityManager.flush();
+            entityManager.clear();
+            // Comprobar que el producto ha sido eliminado
+            assertFalse(productRepository.findById(product.getId()).isPresent());
+        });
     }
 }
-

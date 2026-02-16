@@ -1,17 +1,16 @@
 package org.iesvdm.ecommerce_jpa.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
 @Table(name = "user")
 public class User {
     @Id
@@ -19,11 +18,19 @@ public class User {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Column(length = 120, nullable = false)
     private String email;
-    private String username;
-    private String password;
-    private java.time.LocalDate birthDate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.Set<CartItem> cartItems = new java.util.LinkedHashSet<>();
+    @Column(length = 120, nullable = false)
+    private String username;
+
+    @Column(length = 120, nullable = false)
+    private String password;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<CartItem> cartItems = new java.util.LinkedHashSet<>();
 }

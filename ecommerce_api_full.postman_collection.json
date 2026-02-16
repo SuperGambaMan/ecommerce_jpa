@@ -1,7 +1,7 @@
 {
   "info": {
-    "name": "CRUD Productos Ecommerce JPA",
-    "description": "Colección de pruebas para el CRUD de productos, incluyendo relaciones con categorías, usuarios y cartItems.",
+    "name": "Ecommerce JPA API Full",
+    "description": "Colección completa de pruebas para la API de Ecommerce JPA, incluyendo CRUD de productos, búsqueda avanzada, y endpoints de carrito.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -81,6 +81,62 @@
           "host": ["localhost"],
           "port": "8080",
           "path": ["api", "productos", "1"]
+        }
+      }
+    },
+    {
+      "name": "Buscar Productos (Filtros, Paginación, Orden)",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/productos/search?name=Pelota&categoryId=1&sku=SKU001&page=0&size=5&sortBy=price&direction=desc",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "productos", "search"],
+          "query": [
+            { "key": "name", "value": "Pelota" },
+            { "key": "categoryId", "value": "1" },
+            { "key": "sku", "value": "SKU001" },
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "5" },
+            { "key": "sortBy", "value": "price" },
+            { "key": "direction", "value": "desc" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Añadir Producto al Carrito",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "http://localhost:8080/api/carrito/add?userId=1&productId=1&quantity=2",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "carrito", "add"],
+          "query": [
+            { "key": "userId", "value": "1" },
+            { "key": "productId", "value": "1" },
+            { "key": "quantity", "value": "2" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Resumen del Carrito",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/carrito/resumen?userId=1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "carrito", "resumen"],
+          "query": [
+            { "key": "userId", "value": "1" }
+          ]
         }
       }
     }

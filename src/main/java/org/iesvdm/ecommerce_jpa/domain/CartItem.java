@@ -1,17 +1,15 @@
 package org.iesvdm.ecommerce_jpa.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
 @Table(name = "cart_item")
 public class CartItem {
     @Id
@@ -19,15 +17,19 @@ public class CartItem {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    private Integer quantity;
-    private java.time.LocalDateTime createdAt;
-    private java.time.LocalDateTime updatedAt;
+    private Long quantity;
+
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
+    @Column(name = "modified_date")
+    private LocalDateTime modifiedDate;
 }

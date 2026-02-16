@@ -2,18 +2,17 @@ package org.iesvdm.ecommerce_jpa.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(exclude = "products")
+@Entity
 @Table(name = "category")
 public class Category {
     @Id
@@ -21,14 +20,15 @@ public class Category {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Column(length = 120, nullable = false, unique = true)
     private String name;
 
-    @Size(max = 4000)
-    @Column(columnDefinition = "TEXT")
-    private String description;
+    @Size(max = 120)
+    @Column(name = "descrip", length = 120)
+    private String descrip;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("id DESC")
     @JsonManagedReference
-    private java.util.Set<Product> products = new java.util.LinkedHashSet<>();
+    private Set<Product> products = new java.util.LinkedHashSet<>();
 }

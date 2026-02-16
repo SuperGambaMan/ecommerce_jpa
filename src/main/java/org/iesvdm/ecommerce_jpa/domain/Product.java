@@ -6,17 +6,17 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "category")
 @Entity
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "product")
 public class Product {
@@ -27,29 +27,33 @@ public class Product {
 
     @NotBlank
     @Size(max = 120)
+    @Column(length = 120, nullable = false)
     private String name;
 
+    @Size(max = 255)
+    @Column(length = 255)
     private String descrip;
-    private String image_url;
+
+    @Column(name = "image_url", length = 120)
+    private String imageUrl;
 
     @NotBlank
     @Size(max = 120)
-    @Column(unique = true, nullable = false)
+    @Column(length = 120, unique = true, nullable = false)
     private String sku;
 
     @PositiveOrZero
-    @Column(nullable = false)
-    private java.math.BigDecimal price;
+    @Column(precision = 10, scale = 3, nullable = false)
+    private BigDecimal price;
 
-    @PositiveOrZero
     @Column(nullable = false)
-    private Integer units;
+    private Long quantity;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private Set<CartItem> cartItems = new java.util.LinkedHashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     @JsonBackReference
     private Category category;
