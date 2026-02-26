@@ -14,14 +14,11 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Pelota interactiva\",\n  \"descrip\": \"Pelota con luz y movimiento\",\n  \"image_url\": \"https://img.com/pelota.jpg\",\n  \"sku\": \"SKU001\",\n  \"price\": 9.99,\n  \"units\": 100,\n  \"category\": { \"id\": 1 }\n}"
+          "raw": "{\n  \"name\": \"Pelota interactiva\",\n  \"descrip\": \"Pelota con luz y movimiento\",\n  \"image_url\": \"https://img.com/p1\",\n  \"sku\": \"SKU005\",\n  \"price\": 9.990,\n  \"quantity\": 100,\n  \"category\": { \"id\": 1 }\n}"
         },
         "url": {
-          "raw": "http://localhost:8080/api/productos",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos"]
+          "raw": "{{baseUrl}}",
+          "host": ["{{baseUrl}}"]
         }
       }
     },
@@ -30,11 +27,8 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8080/api/productos",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos"]
+          "raw": "{{baseUrl}}",
+          "host": ["{{baseUrl}}"]
         }
       }
     },
@@ -43,11 +37,9 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8080/api/productos/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos", "1"]
+          "raw": "{{baseUrl}}/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["1"]
         }
       }
     },
@@ -60,14 +52,12 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Pelota interactiva actualizada\",\n  \"descrip\": \"Pelota con luz y sonido\",\n  \"image_url\": \"https://img.com/pelota_new.jpg\",\n  \"sku\": \"SKU001\",\n  \"price\": 12.99,\n  \"units\": 80,\n  \"category\": { \"id\": 1 }\n}"
+          "raw": "{\n  \"name\": \"Pelota interactiva actualizada\",\n  \"descrip\": \"Pelota con luz y sonido\",\n  \"image_url\": \"https://img.com/pelota_new.jpg\",\n  \"sku\": \"SKU005\",\n  \"price\": 12.990,\n  \"quantity\": 80,\n  \"category\": { \"id\": 1 }\n}"
         },
         "url": {
-          "raw": "http://localhost:8080/api/productos/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos", "1"]
+          "raw": "{{baseUrl}}/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["1"]
         }
       }
     },
@@ -76,11 +66,9 @@
       "request": {
         "method": "DELETE",
         "url": {
-          "raw": "http://localhost:8080/api/productos/1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos", "1"]
+          "raw": "{{baseUrl}}/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["1"]
         }
       }
     },
@@ -89,15 +77,13 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8080/api/productos/search?name=Pelota&categoryId=1&sku=SKU001&page=0&size=5&sortBy=price&direction=desc",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "productos", "search"],
+          "raw": "{{baseUrl}}/search?name=Pelota&categoryId=1&sku=SKU005&page=0&size=5&sortBy=price&direction=desc",
+          "host": ["{{baseUrl}}"],
+          "path": ["search"],
           "query": [
             { "key": "name", "value": "Pelota" },
             { "key": "categoryId", "value": "1" },
-            { "key": "sku", "value": "SKU001" },
+            { "key": "sku", "value": "SKU005" },
             { "key": "page", "value": "0" },
             { "key": "size", "value": "5" },
             { "key": "sortBy", "value": "price" },
@@ -111,11 +97,9 @@
       "request": {
         "method": "POST",
         "url": {
-          "raw": "http://localhost:8080/api/carrito/add?userId=1&productId=1&quantity=2",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "carrito", "add"],
+          "raw": "{{baseUrl}}/carrito/add?userId=1&productId=1&quantity=2",
+          "host": ["{{baseUrl}}"],
+          "path": ["carrito", "add"],
           "query": [
             { "key": "userId", "value": "1" },
             { "key": "productId", "value": "1" },
@@ -129,11 +113,9 @@
       "request": {
         "method": "GET",
         "url": {
-          "raw": "http://localhost:8080/api/carrito/resumen?userId=1",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["api", "carrito", "resumen"],
+          "raw": "{{baseUrl}}/carrito/resumen?userId=1",
+          "host": ["{{baseUrl}}"],
+          "path": ["carrito", "resumen"],
           "query": [
             { "key": "userId", "value": "1" }
           ]
@@ -142,4 +124,3 @@
     }
   ]
 }
-
