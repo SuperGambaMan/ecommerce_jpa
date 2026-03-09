@@ -1,3 +1,7 @@
+# Ecommerce JPA
+
+API RESTful en Java (Spring Boot + JPA) para gestionar productos, categorías, usuarios y carritos en una tienda online. Incluye endpoints CRUD, búsqueda avanzada y pruebas con Postman.
+
 # Documentación de la API Ecommerce JPA
 
 ## Arquitectura y capas
@@ -120,4 +124,3 @@ La aplicación sigue una arquitectura por capas:
 - El endpoint de búsqueda soporta filtros combinados, paginación y ordenación.
 - El endpoint de carrito suma cantidades si el producto ya existe en el carrito y elimina el producto si la cantidad llega a 0.
 - Puedes probar todos los endpoints con la colección de Postman incluida en el proyecto.
-
